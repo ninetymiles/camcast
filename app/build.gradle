@@ -19,6 +19,9 @@ android {
         versionCode Integer.parseInt(([ 'git','rev-list','--count','HEAD'].execute().text).trim())
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        resValue "string", "default_server_uri", '""'
+        resValue "integer", "default_resolution", '1'
     }
 
     buildTypes {
@@ -28,6 +31,8 @@ android {
         }
         debug {
             versionNameSuffix "-debug"
+            resValue "string", "default_server_uri", '"rtmp://192.168.88.62:1935/live/1"'
+            //resValue "string", "default_server_uri", '"srt://192.168.88.62:8080/publish/live"'
         }
     }
     compileOptions {
@@ -53,8 +58,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     implementation("androidx.documentfile:documentfile:1.1.0")
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.9.4'
-    implementation("androidx.preference:preference:1.2.1")
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.10.0'
+    implementation("androidx.preference:preference-ktx:1.2.1")
 
     implementation 'com.google.android.material:material:1.13.0'
 

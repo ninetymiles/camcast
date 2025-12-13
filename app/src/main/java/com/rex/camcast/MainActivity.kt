@@ -15,6 +15,7 @@ import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
+import androidx.preference.PreferenceManager
 import com.rex.camcast.data.rotation.RotationRepository
 import com.rex.camcast.databinding.ActivityMainBinding
 import com.rex.camcast.preference.PreferenceViewActivity
@@ -145,8 +146,11 @@ class MainActivity : AppCompatActivity() {
                             /**
                              * For SRT, use srt://my.server.url:9998?streamid=myStreamId&passphrase=myPassphrase
                              */
-                            streamer.startStream("rtmp://192.168.88.62:1935/live/1")
-                            //streamer.startStream("srt://192.168.88.62:8080/publish/live")
+                            val defaultUri: String = getResources().getString(R.string.default_server_uri)
+                            val serverUri: String? = PreferenceManager.getDefaultSharedPreferences(applicationContext).getString("PREFS_SERVER_URI", defaultUri)
+                            if (serverUri != null) {
+                                streamer.startStream(serverUri)
+                            }
                         } catch (e: Exception) {
                             binding.liveButton.isChecked = false
                             Log.e(TAG, "Failed to connect", e)

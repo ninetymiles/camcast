@@ -25,7 +25,6 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
-import com.rex.camcast.CamCastApp;
 import com.rex.camcast.R;
 
 import org.slf4j.Logger;
@@ -60,10 +59,12 @@ public class FragmentSettings extends PreferenceFragmentCompat {
 
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
 
+        String defaultServerUri = getResources().getString(R.string.default_server_uri);
+        //logger.trace("defaultServerUri=<{}>", defaultServerUri);
         EditTextPreference prefsUri = getPreferenceScreen().findPreference("PREFS_SERVER_URI");
         if (prefsUri != null) {
-            prefsUri.setText(prefs.getString("PREFS_SERVER_URI", "")); // EditText value
-            //prefsUri.setSummary(prefs.getString("PREFS_WEBHOOK_URL", BuildConfig.WEBHOOK_URL));
+            prefsUri.setText(prefs.getString("PREFS_SERVER_URI", defaultServerUri)); // EditText value
+            prefsUri.setSummary(prefs.getString("PREFS_SERVER_URI", defaultServerUri));
             prefsUri.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
@@ -74,11 +75,12 @@ public class FragmentSettings extends PreferenceFragmentCompat {
                         if (!TextUtils.isEmpty(uri)) {
                             allowUpdate = true;
                         } else {
+                            // Input empty string will reset back to default value
                             prefs.edit()
-                                    .putString("PREFS_SERVER_URI", "")
+                                    .putString("PREFS_SERVER_URI", defaultServerUri)
                                     .apply();
                         }
-                        //preference.setSummary(uri);
+                        preference.setSummary(uri);
                     } catch (Exception ex) {
                         logger.warn("Failed to parse URI <{}> - {}", newValue, ex.getMessage());
                         Toast.makeText(getContext(), getString(R.string.settings_server_invalid_template, newValue, ex.getMessage()), Toast.LENGTH_LONG).show();
