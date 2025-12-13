@@ -24,10 +24,16 @@ android {
         resValue "integer", "default_resolution", '1'
     }
 
+    signingConfigs {
+        release {}
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            signingConfig = signingConfigs.getByName("release")
         }
         debug {
             versionNameSuffix "-debug"
@@ -50,6 +56,16 @@ android {
     }
     buildFeatures {
         viewBinding true
+    }
+}
+
+// Provided in gradle.properties
+if (project.hasProperty("signStoreFile")) {
+    android.signingConfigs.release {
+        storeFile = rootProject.file(signStoreFile)
+        storePassword = signStorePassword
+        keyAlias = signKeyAlias
+        keyPassword = signKeyPassword
     }
 }
 
