@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+    <appender name="logfile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${DATA_DIR}/log/forwarder_%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+            <totalSizeCap>100MB</totalSizeCap>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+        <file>${DATA_DIR}/log/camcast.log</file>
+        <encoder>
+            <pattern>%date %.-1level/%-8.-8logger [%-6.-6thread] %class{0}::%method %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="logcat" class="ch.qos.logback.classic.android.LogcatAppender">
+        <encoder>
+            <pattern>[%thread] %class{0}::%method %msg</pattern>
+        </encoder>
+    </appender>
+
+    <root level="TRACE">
+        <appender-ref ref="logcat" />
+        <appender-ref ref="logfile" />
+    </root>
+</configuration>

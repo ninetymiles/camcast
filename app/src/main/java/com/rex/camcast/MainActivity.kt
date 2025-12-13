@@ -2,17 +2,22 @@ package com.rex.camcast
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.media.AudioFormat
 import android.media.MediaFormat
 import android.os.Bundle
 import android.util.Log
 import android.util.Size
+import android.view.Menu
+import android.view.MenuItem
 import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.rex.camcast.data.rotation.RotationRepository
+import com.rex.camcast.databinding.ActivityMainBinding
+import com.rex.camcast.preference.PreferenceViewActivity
 import com.rex.camcast.utils.PermissionsManager
 import com.rex.camcast.utils.showDialog
 import com.rex.camcast.utils.toast
@@ -26,7 +31,6 @@ import io.github.thibaultbee.streampack.core.streamers.single.AudioConfig
 import io.github.thibaultbee.streampack.core.streamers.single.SingleStreamer
 import io.github.thibaultbee.streampack.core.streamers.single.VideoConfig
 import io.github.thibaultbee.streampack.core.utils.extensions.isClosedException
-import com.rex.camcast.databinding.ActivityMainBinding
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
@@ -104,6 +108,27 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         bindProperties()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        getMenuInflater().inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.getItemId()
+        if (id == R.id.action_test) {
+            return true
+        } else if (id == R.id.action_settings) {
+            val intent: Intent = Intent(this, PreferenceViewActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION)
+            startActivity(intent)
+            return true
+        } else if (id == R.id.action_exit) {
+            finishAndRemoveTask()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun bindProperties() {

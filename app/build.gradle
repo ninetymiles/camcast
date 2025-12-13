@@ -52,7 +52,9 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.17.0'
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
+    implementation("androidx.documentfile:documentfile:1.1.0")
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.9.4'
+    implementation("androidx.preference:preference:1.2.1")
 
     implementation 'com.google.android.material:material:1.13.0'
 
@@ -60,6 +62,9 @@ dependencies {
     implementation "io.github.thibaultbee.streampack:streampack-ui:3.0.2"
     implementation "io.github.thibaultbee.streampack:streampack-rtmp:3.0.2"
     implementation "io.github.thibaultbee.streampack:streampack-srt:3.0.2"
+
+    implementation("org.slf4j:slf4j-api:2.0.17")
+    implementation("com.github.tony19:logback-android:3.0.0")
 
     testImplementation 'junit:junit:4.13.2'
 

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:title="@string/settings_category_general"
+        app:iconSpaceReserved="false">
+
+        <EditTextPreference
+            android:key="PREFS_SERVER_URI"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:summary="@string/settings_server_summary"
+            android:title="@string/settings_server_title"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="PREFS_EXPORT_LOG"
+            android:summary="@string/settings_export_log_summary"
+            android:title="@string/settings_export_log_title"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/settings_category_about"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:summary="@string/about_app_summary"
+            android:title="@string/app_title"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="PREFS_VERSION"
+            android:summary="@string/about_version_summary"
+            android:title="@string/about_version_title"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceScreen
+        android:fragment="com.rex.camcast.preference.FragmentAbout"
+        android:key="PREFS_ABOUT"
+        android:title="@string/settings_about"
+        app:iconSpaceReserved="false"
+        app:isPreferenceVisible="false" />
+
+</PreferenceScreen>
