@@ -3,6 +3,8 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
+version baseVersion
+
 android {
     namespace 'com.rex.camcast'
     compileSdk 36
@@ -13,8 +15,8 @@ android {
         minSdk 26
         targetSdk 36
 
-        versionCode 1
-        versionName "1.0"
+        versionName = project.version.toString()
+        versionCode Integer.parseInt(([ 'git','rev-list','--count','HEAD'].execute().text).trim())
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -23,6 +25,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            versionNameSuffix "-debug"
         }
     }
     compileOptions {
@@ -36,6 +41,7 @@ android {
         jniLibs {
             pickFirsts += ['**/*.so']
         }
+        exclude "META-INF/**"
     }
     buildFeatures {
         viewBinding true
@@ -50,10 +56,10 @@ dependencies {
 
     implementation 'com.google.android.material:material:1.13.0'
 
-    implementation "io.github.thibaultbee.streampack:streampack-core:${streampackVersion}"
-    implementation "io.github.thibaultbee.streampack:streampack-ui:${streampackVersion}"
-    implementation "io.github.thibaultbee.streampack:streampack-rtmp:${streampackVersion}"
-    implementation "io.github.thibaultbee.streampack:streampack-srt:${streampackVersion}"
+    implementation "io.github.thibaultbee.streampack:streampack-core:3.0.2"
+    implementation "io.github.thibaultbee.streampack:streampack-ui:3.0.2"
+    implementation "io.github.thibaultbee.streampack:streampack-rtmp:3.0.2"
+    implementation "io.github.thibaultbee.streampack:streampack-srt:3.0.2"
 
     testImplementation 'junit:junit:4.13.2'
 
