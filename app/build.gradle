@@ -1,0 +1,62 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'com.rex.camcast'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId "com.rex.camcast"
+
+        minSdk 26
+        targetSdk 36
+
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    packagingOptions {
+        jniLibs {
+            pickFirsts += ['**/*.so']
+        }
+    }
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.17.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.9.4'
+
+    implementation 'com.google.android.material:material:1.13.0'
+
+    implementation "io.github.thibaultbee.streampack:streampack-core:${streampackVersion}"
+    implementation "io.github.thibaultbee.streampack:streampack-ui:${streampackVersion}"
+    implementation "io.github.thibaultbee.streampack:streampack-rtmp:${streampackVersion}"
+    implementation "io.github.thibaultbee.streampack:streampack-srt:${streampackVersion}"
+
+    testImplementation 'junit:junit:4.13.2'
+
+    androidTestImplementation 'androidx.test.ext:junit:1.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
+}
