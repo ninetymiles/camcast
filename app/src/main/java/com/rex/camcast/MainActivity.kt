@@ -112,12 +112,20 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        logger.trace("")
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //setSupportActionBar(binding.toolbar)
+        setSupportActionBar(binding.toolbar)
+        //binding.toolbar.setBackgroundColor(Color.TRANSPARENT);
 
         bindProperties()
         applyInsets()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        logger.trace("")
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -232,6 +240,26 @@ class MainActivity : AppCompatActivity() {
 
     private fun applyInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(
+            binding.appBarLayout,
+            OnApplyWindowInsetsListener { v: View?, windowInsets: WindowInsetsCompat? ->
+                val insets = windowInsets!!.getInsets(
+                    (WindowInsetsCompat.Type.systemBars())
+                )
+                logger.trace("v={} insets={}", v, insets)
+
+                val mlp = v!!.getLayoutParams() as MarginLayoutParams
+                mlp.leftMargin = insets.left
+                mlp.topMargin = insets.top
+                mlp.rightMargin = insets.right
+                mlp.bottomMargin = insets.bottom
+                v.setLayoutParams(mlp)
+
+//                binding.liveButton.setPadding(insets.left, insets.top, insets.right, insets.bottom)
+
+                WindowInsetsCompat.CONSUMED
+            })
+
+        ViewCompat.setOnApplyWindowInsetsListener(
             binding.content,
             OnApplyWindowInsetsListener { v: View?, windowInsets: WindowInsetsCompat? ->
                 val insets = windowInsets!!.getInsets(
@@ -239,14 +267,9 @@ class MainActivity : AppCompatActivity() {
                             or WindowInsetsCompat.Type.displayCutout()
                             or WindowInsetsCompat.Type.navigationBars())
                 )
-                logger.trace("insets={}", insets)
+                logger.trace("v={} insets={}", v, insets)
 
-                val mlp = v!!.getLayoutParams() as MarginLayoutParams
-                //mlp.leftMargin = insets.left
-                //mlp.topMargin = insets.top;
-                mlp.rightMargin = insets.right
-                mlp.bottomMargin = insets.bottom
-                v.setLayoutParams(mlp)
+                v?.setPadding(insets.left, insets.top, insets.right, insets.bottom)
 
                 WindowInsetsCompat.CONSUMED
             })
@@ -262,7 +285,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        logger.trace("")
+
         permissionsManager.requestPermissions()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        logger.trace("")
     }
 
     @RequiresPermission(allOf = [Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO])

@@ -42,8 +42,8 @@
 
         <activity
             android:name=".preference.PreferenceViewActivity"
-            android:theme="@style/Theme.CamCast.Preference"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.CamCast.Preference">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SETTINGS" />

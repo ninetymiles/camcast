@@ -5,6 +5,9 @@ import android.view.MenuItem;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.rex.camcast.R;
 import com.rex.camcast.databinding.ActivityPreferenceBinding;
@@ -26,13 +29,22 @@ public class PreferenceViewActivity extends AppCompatActivity {
 
         ActivityPreferenceBinding binding = ActivityPreferenceBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-//        setSupportActionBar(binding.toolbar);
+        setSupportActionBar(binding.toolbar);
 
         final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(false);
         }
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.preferenceContent, (v, windowInsets) -> {
+            int type = WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout();
+            Insets insets = windowInsets.getInsets(type);
+            //mLogger.trace("insets={}", insets);
+
+            v.setPadding(insets.left, 0, 0, insets.bottom);
+            return WindowInsetsCompat.CONSUMED;
+        });
 
         // Avoid rotate device when showing FragmentAbout, will force overlay a FragmentGeneral unexpected
         if (getSupportFragmentManager().findFragmentByTag(FragmentAbout.TAG) == null) {
