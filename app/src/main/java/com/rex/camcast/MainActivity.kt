@@ -7,12 +7,16 @@ import android.content.pm.ActivityInfo
 import android.media.AudioFormat
 import android.media.MediaFormat
 import android.os.Bundle
-import android.util.Log
 import android.util.Size
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup.MarginLayoutParams
 import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.OnApplyWindowInsetsListener
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
@@ -35,8 +39,11 @@ import io.github.thibaultbee.streampack.core.utils.extensions.isClosedException
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class MainActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityMainBinding
 
     private val streamerRequiredPermissions =
@@ -107,8 +114,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        //setSupportActionBar(binding.toolbar)
 
         bindProperties()
+        applyInsets()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -153,7 +162,7 @@ class MainActivity : AppCompatActivity() {
                             }
                         } catch (e: Exception) {
                             binding.liveButton.isChecked = false
-                            Log.e(TAG, "Failed to connect", e)
+                            logger.warn("Failed to connect - {}", e.toString())
                             toast("Connection failed: ${e.message}")
                         } finally {
                             isTryingConnectionLiveData.postValue(false)
@@ -206,7 +215,7 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             streamer.throwableFlow.filterNotNull().filter { !it.isClosedException }
                 .collect { throwable ->
-                    Log.e(TAG, "Error: ${throwable.message}", throwable)
+                    logger.warn("Error: {}", throwable.toString())
                     toast("Error: ${throwable.message}")
                 }
         }
@@ -215,19 +224,35 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             streamer.throwableFlow.filterNotNull().filter { it.isClosedException }
                 .collect { throwable ->
-                    Log.e(TAG, "Connection lost: ${throwable.message}", throwable)
+                    logger.warn("Connection lost: {}", throwable.toString())
                     toast("Connection lost: ${throwable.message}")
                 }
         }
     }
 
+    private fun applyInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(
+            binding.content,
+            OnApplyWindowInsetsListener { v: View?, windowInsets: WindowInsetsCompat? ->
+                val insets = windowInsets!!.getInsets(
+                    (WindowInsetsCompat.Type.statusBars()
+                            or WindowInsetsCompat.Type.displayCutout()
+                            or WindowInsetsCompat.Type.navigationBars())
+                )
+                logger.trace("insets={}", insets)
+
+                val mlp = v!!.getLayoutParams() as MarginLayoutParams
+                //mlp.leftMargin = insets.left
+                //mlp.topMargin = insets.top;
+                mlp.rightMargin = insets.right
+                mlp.bottomMargin = insets.bottom
+                v.setLayoutParams(mlp)
+
+                WindowInsetsCompat.CONSUMED
+            })
+    }
+
     private fun lockOrientation() {
-        /**
-         * Lock orientation while stream is running to avoid stream interruption if
-         * user turns the device.
-         * For landscape only mode, set [requireActivity().requestedOrientation] to
-         * [ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE].
-         */
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED
     }
 
@@ -305,6 +330,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val TAG = "MainActivity"
+        //private const val TAG = "MainActivity"
+        private val logger: Logger = LoggerFactory.getLogger(MainActivity::class.java)
     }
 }
