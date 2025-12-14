@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.graphics.Color
 import android.media.AudioFormat
 import android.media.MediaFormat
 import android.os.Bundle
@@ -117,7 +118,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
-        //binding.toolbar.setBackgroundColor(Color.TRANSPARENT);
+
+        binding.appBarLayout.setBackgroundColor(Color.TRANSPARENT)
+        val actionBar = getSupportActionBar()
+        actionBar?.setDisplayShowTitleEnabled(false)
 
         bindProperties()
         applyInsets()

@@ -25,10 +25,10 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
-            style="@style/Theme.CamCast.Toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize" />
-        <!--        app:popupTheme="@style/Theme.CamCast.PopupOverlay"-->
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/Theme.CamCast.PopupOverlay" />
+        <!--        style="@style/Theme.CamCast.Toolbar"-->
 
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -24,7 +24,7 @@
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
 
-<!--        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>-->
+        <!--        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>-->
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
 
@@ -35,7 +35,7 @@
         <!-- Theme.MaterialComponents.DayNight.DarkActionBar -->
         <!--        <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.Dark.ActionBar</item>-->
 
-        <item name="actionBarStyle">@style/Widget.TransparentActionBar</item>
+        <!--        <item name="actionBarStyle">@style/Widget.TransparentActionBar</item>-->
         <!--        <item name="actionMenuTextColor">@android:color/holo_green_light</item>-->
 
         <!--        <item name="popupMenuStyle">@style/Widget.CamCast.PopupMenu</item>-->
@@ -45,7 +45,7 @@
         <!-- For PreferenceFragmentCompat -->
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
 
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!--        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>-->
         <!--        <item name="android:navigationBarColor">?attr/colorPrimary</item>-->
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
