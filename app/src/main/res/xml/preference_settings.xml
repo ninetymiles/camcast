@@ -39,11 +39,4 @@
 
     </PreferenceCategory>
 
-    <PreferenceScreen
-        android:fragment="com.rex.camcast.preference.FragmentAbout"
-        android:key="PREFS_ABOUT"
-        android:title="@string/settings_about"
-        app:iconSpaceReserved="false"
-        app:isPreferenceVisible="false" />
-
 </PreferenceScreen>

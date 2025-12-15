@@ -137,22 +137,6 @@ public class FragmentSettings extends PreferenceFragmentCompat {
                 logger.warn("Failed to get package info - {}", e.toString());
             }
         }
-
-        Preference prefsAbout = getPreferenceScreen().findPreference("PREFS_ABOUT");
-        if (prefsAbout != null) {
-            prefsAbout.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(@NonNull Preference preference) {
-                    logger.trace("PREFS_ABOUT");
-                    getParentFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.preferenceContent, new FragmentAbout())
-                            .addToBackStack(null)
-                            .commit();
-                    return true;
-                }
-            });
-        }
     }
 
     @Override

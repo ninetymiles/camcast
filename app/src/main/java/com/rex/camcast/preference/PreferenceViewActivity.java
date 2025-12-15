@@ -47,10 +47,10 @@ public class PreferenceViewActivity extends AppCompatActivity {
         });
 
         // Avoid rotate device when showing FragmentAbout, will force overlay a FragmentGeneral unexpected
-        if (getSupportFragmentManager().findFragmentByTag(FragmentAbout.TAG) == null) {
+        if (getSupportFragmentManager().findFragmentByTag(FragmentSettings.TAG) == null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.preferenceContent, new FragmentSettings(), FragmentAbout.TAG)
+                    .replace(R.id.preferenceContent, new FragmentSettings(), FragmentSettings.TAG)
                     .commit();
         }
     }
