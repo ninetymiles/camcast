@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'maven-publish'
 }
 
 version baseVersion
@@ -57,6 +58,11 @@ android {
     buildFeatures {
         viewBinding true
     }
+    publishing {
+        singleVariant('release') {
+            publishApk()
+        }
+    }
 }
 
 // Provided in gradle.properties
@@ -91,4 +97,23 @@ dependencies {
 
     androidTestImplementation 'androidx.test.ext:junit:1.3.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
+}
+
+//println("project.name: " + project.name)        // app
+//println("project.group: " + project.group)      // CamCast
+//println("project.version: " + project.version)  // 0.9.x
+afterEvaluate {
+    //println("components.names: " + components.names) // [release]
+    publishing {
+        publications {
+            release(MavenPublication) {
+                groupId = "rex"
+                artifactId = "camcast"
+                from(components.release)
+            }
+        }
+        repositories {
+            maven { url = uri(rootProject.file("release")) }
+        }
+    }
 }
