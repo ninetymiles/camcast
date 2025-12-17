@@ -15,3 +15,6 @@ An simple app to cast camera live streaming to RTMP or SRT server.
 
 - Provide preference page to set server address
 - Rotate device auto restart the stream
+- Show focus box
+- Try auto lock focus on objects
+- Provide portal page to request for permissions
