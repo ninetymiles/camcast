@@ -23,6 +23,10 @@ android {
 
         resValue "string", "default_server_uri", '""'
         resValue "integer", "default_resolution", '1'
+
+        if (project.hasProperty("castUri")) {
+            resValue "string", "default_server_uri", '"' + castUri + '"'
+        }
     }
 
     signingConfigs {
@@ -38,8 +42,6 @@ android {
         }
         debug {
             versionNameSuffix "-debug"
-            resValue "string", "default_server_uri", '"rtmp://192.168.88.62:1935/live/1"'
-            //resValue "string", "default_server_uri", '"srt://192.168.88.62:8080/publish/live"'
         }
     }
     compileOptions {
