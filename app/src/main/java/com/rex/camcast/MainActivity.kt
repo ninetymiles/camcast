@@ -164,12 +164,10 @@ class MainActivity : AppCompatActivity() {
                     lifecycleScope.launch {
                         try {
                             isTryingConnectionLiveData.postValue(true)
-                            /**
-                             * For SRT, use srt://my.server.url:9998?streamid=myStreamId&passphrase=myPassphrase
-                             */
                             val defaultUri: String = getResources().getString(R.string.default_server_uri)
                             val serverUri: String? = PreferenceManager.getDefaultSharedPreferences(applicationContext).getString("PREFS_SERVER_URI", defaultUri)
                             if (serverUri != null) {
+                                logger.info("Connecting to server: $serverUri")
                                 streamer.startStream(serverUri)
                             }
                         } catch (e: Exception) {
