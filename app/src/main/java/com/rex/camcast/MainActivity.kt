@@ -2,11 +2,16 @@ package com.rex.camcast
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.media.AudioFormat
 import android.media.MediaFormat
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.net.wifi.WifiInfo
+import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.util.Size
 import android.view.Menu
@@ -123,8 +128,80 @@ class MainActivity : AppCompatActivity() {
         val actionBar = getSupportActionBar()
         actionBar?.setDisplayShowTitleEnabled(false)
 
+        updateNetworkInfo()
         bindProperties()
         applyInsets()
+    }
+
+    /**
+     * Update network information (WIFI name and IP address) in the UI
+     */
+    private fun updateNetworkInfo() {
+        val wifiName = getWifiName()
+        val ipAddress = getIpAddress()
+        
+        binding.wifiNameValue.text = wifiName
+        binding.ipAddressValue.text = ipAddress
+    }
+
+    /**
+     * Get the current connected WIFI name
+     */
+    @SuppressLint("MissingPermission")
+    private fun getWifiName(): String {
+        val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        val wifiInfo: WifiInfo? = wifiManager.connectionInfo
+        return if (wifiInfo != null && wifiInfo.ssid != null) {
+            wifiInfo.ssid.replace("^", "").replace("$", "") // Remove quotes
+        } else {
+            "Not connected"
+        }
+    }
+
+    /**
+     * Get the device IP address
+     */
+    private fun getIpAddress(): String {
+        val connectivityManager = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network = connectivityManager.activeNetwork ?: return "No network"
+        val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return "No capabilities"
+        
+        if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+            val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+            val wifiInfo: WifiInfo? = wifiManager.connectionInfo
+            if (wifiInfo != null) {
+                val ip = wifiInfo.ipAddress
+                return "${ip and 0xFF}.${ip shr 8 and 0xFF}.${ip shr 16 and 0xFF}.${ip shr 24 and 0xFF}"
+            }
+        }
+        
+        return "Unknown"
+    }
+
+    /**
+     * Update stream status in the UI
+     */
+    private fun updateStreamStatus() {
+        val isTryingConnection = isTryingConnectionLiveData.value ?: false
+        
+        // Get current streaming state from the streamer
+        val isStreaming = try {
+            // Check if streamer is currently streaming
+            // We'll use the same logic as in the live button update
+            // Since we can't directly access streamer.isStreaming
+            // We'll infer it from the live button state
+            binding.liveButton.isChecked && !isTryingConnection
+        } catch (e: Exception) {
+            false
+        }
+        
+        val statusText = when {
+            isTryingConnection -> "Connecting..."
+            isStreaming -> "Streaming"
+            else -> "Disconnected"
+        }
+        
+        binding.streamStatusValue.text = statusText
     }
 
     override fun onDestroy() {
@@ -218,6 +295,14 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     binding.liveButton.isChecked = false
                 }
+                updateStreamStatus()
+            }
+        }
+
+        // Observe connection state changes
+        lifecycleScope.launch {
+            isTryingConnectionLiveData.observe(this@MainActivity) {
+                updateStreamStatus()
             }
         }
 
