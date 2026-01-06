@@ -216,7 +216,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.getItemId()
-        if (id == R.id.action_test) {
+        if (id == R.id.action_toggle_status) {
+            // Toggle the visibility of the status card
+            val currentVisibility = binding.statusCard.visibility
+            binding.statusCard.visibility = if (currentVisibility == View.VISIBLE) {
+                View.GONE
+            } else {
+                View.VISIBLE
+            }
+            return true
+        } else if (id == R.id.action_test) {
             return true
         } else if (id == R.id.action_settings) {
             val intent: Intent = Intent(this, PreferenceViewActivity::class.java)
