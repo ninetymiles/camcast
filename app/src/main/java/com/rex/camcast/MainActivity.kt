@@ -2,16 +2,11 @@ package com.rex.camcast
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.media.AudioFormat
 import android.media.MediaFormat
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.net.wifi.WifiInfo
-import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.util.Size
 import android.view.Menu
@@ -24,6 +19,7 @@ import androidx.core.view.OnApplyWindowInsetsListener
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.rex.camcast.data.rotation.RotationRepository
@@ -32,6 +28,7 @@ import com.rex.camcast.preference.PreferenceViewActivity
 import com.rex.camcast.utils.PermissionsManager
 import com.rex.camcast.utils.showDialog
 import com.rex.camcast.utils.toast
+import com.rex.camcast.viewmodel.MainViewModel
 import io.github.thibaultbee.streampack.core.elements.sources.audio.audiorecord.MicrophoneSourceFactory
 import io.github.thibaultbee.streampack.core.elements.sources.video.camera.extensions.defaultCameraId
 import io.github.thibaultbee.streampack.core.interfaces.setCameraId
@@ -116,6 +113,8 @@ class MainActivity : AppCompatActivity() {
      */
     private val isTryingConnectionLiveData = MutableLiveData<Boolean>()
 
+    private lateinit var viewModel: MainViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         logger.trace("")
@@ -130,35 +129,20 @@ class MainActivity : AppCompatActivity() {
 
         binding.statusCard.visibility = View.GONE
 
-        updateNetworkInfo()
+        // Initialize ViewModel
+        viewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
+            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+                return MainViewModel(applicationContext) as T
+            }
+        })[MainViewModel::class.java]
+
+        // Observe IP address
+        viewModel.ipAddress.observe(this) { ip ->
+            binding.ipAddressValue.text = ip
+        }
+
         bindProperties()
         applyInsets()
-    }
-
-    /**
-     * Update network information (WIFI name and IP address) in the UI
-     */
-    private fun updateNetworkInfo() {
-        val ipAddress = getIpAddress()
-        binding.ipAddressValue.text = ipAddress
-    }
-
-    /**
-     * Get the device IP address
-     */
-    private fun getIpAddress(): String {
-        val connectivityManager = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val network = connectivityManager.activeNetwork ?: return "No network"
-        val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return "No capabilities"
-        if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-            val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-            val wifiInfo: WifiInfo? = wifiManager.connectionInfo
-            if (wifiInfo != null) {
-                val ip = wifiInfo.ipAddress
-                return "${ip and 0xFF}.${ip shr 8 and 0xFF}.${ip shr 16 and 0xFF}.${ip shr 24 and 0xFF}"
-            }
-        }
-        return "Unknown"
     }
 
     /**
@@ -249,6 +233,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 } else {
                     lifecycleScope.launch {
+                        logger.info("Disconnect server")
                         streamer.stopStream()
                     }
                 }
