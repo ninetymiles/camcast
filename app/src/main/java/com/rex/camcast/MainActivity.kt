@@ -18,7 +18,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup.MarginLayoutParams
-import android.widget.FrameLayout
 import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.OnApplyWindowInsetsListener
@@ -134,80 +133,6 @@ class MainActivity : AppCompatActivity() {
         updateNetworkInfo()
         bindProperties()
         applyInsets()
-        setupFocusListener()
-    }
-
-    /**
-     * Set up focus listener for the preview view
-     */
-    private fun setupFocusListener() {
-        binding.preview.setOnTouchListener { _, event ->
-            val x = event.x
-            val y = event.y
-            focusOnTouch(x, y)
-            true
-        }
-    }
-
-    /**
-     * Handle focus on touch event
-     */
-    private fun focusOnTouch(x: Float, y: Float) {
-        // Show focus box animation
-        showFocusBox(x, y)
-        
-        // Focus functionality will be implemented here
-        // StreamPack 3.0.2 API requires specific implementation
-        lifecycleScope.launch {
-            try {
-                // TODO: Implement focus functionality using StreamPack 3.0.2 API
-                // For now, we'll just show the focus box animation
-                logger.info("Focus requested at: x={}, y={}", x, y)
-            } catch (e: Exception) {
-                logger.warn("Failed to set focus: {}", e.toString())
-            }
-        }
-    }
-
-    /**
-     * Show focus box animation at the touch point
-     */
-    private fun showFocusBox(x: Float, y: Float) {
-        val focusBox = binding.focusBox
-        val focusOverlay = binding.focusOverlay
-        
-        // Calculate position
-        val boxSize = resources.getDimensionPixelSize(R.dimen.focus_box_size)
-        val left = (x - boxSize / 2).toInt()
-        val top = (y - boxSize / 2).toInt()
-        
-        // Set position
-        val params = focusBox.layoutParams as FrameLayout.LayoutParams
-        params.leftMargin = left
-        params.topMargin = top
-        focusBox.layoutParams = params
-        
-        // Show focus box
-        focusBox.visibility = View.VISIBLE
-        
-        // Animate focus box
-        focusBox.alpha = 0f
-        focusBox.animate()
-            .alpha(1f)
-            .scaleX(1.2f)
-            .scaleY(1.2f)
-            .setDuration(300)
-            .withEndAction {
-                focusBox.animate()
-                    .alpha(0f)
-                    .scaleX(1f)
-                    .scaleY(1f)
-                    .setDuration(500)
-                    .setStartDelay(500)
-                    .withEndAction {
-                        focusBox.visibility = View.INVISIBLE
-                    }
-            }
     }
 
     /**
@@ -225,7 +150,6 @@ class MainActivity : AppCompatActivity() {
         val connectivityManager = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val network = connectivityManager.activeNetwork ?: return "No network"
         val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return "No capabilities"
-        
         if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
             val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
             val wifiInfo: WifiInfo? = wifiManager.connectionInfo
@@ -234,7 +158,6 @@ class MainActivity : AppCompatActivity() {
                 return "${ip and 0xFF}.${ip shr 8 and 0xFF}.${ip shr 16 and 0xFF}.${ip shr 24 and 0xFF}"
             }
         }
-        
         return "Unknown"
     }
 

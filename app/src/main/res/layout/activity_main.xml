@@ -13,28 +13,6 @@
         android:layout_height="match_parent"
         android:keepScreenOn="true" />
 
-    <!-- Focus box overlay -->
-    <FrameLayout
-        android:id="@+id/focusOverlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="false"
-        android:focusable="false">
-
-        <View
-            android:id="@+id/focusBox"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:background="@drawable/focus_box"
-            android:elevation="2dp"
-            android:visibility="invisible" />
-
-    </FrameLayout>
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent"-->
-
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar_layout"
         style="@style/Theme.CamCast.AppBarOverlay"
