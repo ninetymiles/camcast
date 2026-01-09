@@ -18,6 +18,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup.MarginLayoutParams
+import android.widget.FrameLayout
 import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.OnApplyWindowInsetsListener
@@ -128,34 +129,93 @@ class MainActivity : AppCompatActivity() {
         val actionBar = getSupportActionBar()
         actionBar?.setDisplayShowTitleEnabled(false)
 
+        binding.statusCard.visibility = View.GONE
+
         updateNetworkInfo()
         bindProperties()
         applyInsets()
+        setupFocusListener()
+    }
+
+    /**
+     * Set up focus listener for the preview view
+     */
+    private fun setupFocusListener() {
+        binding.preview.setOnTouchListener { _, event ->
+            val x = event.x
+            val y = event.y
+            focusOnTouch(x, y)
+            true
+        }
+    }
+
+    /**
+     * Handle focus on touch event
+     */
+    private fun focusOnTouch(x: Float, y: Float) {
+        // Show focus box animation
+        showFocusBox(x, y)
+        
+        // Focus functionality will be implemented here
+        // StreamPack 3.0.2 API requires specific implementation
+        lifecycleScope.launch {
+            try {
+                // TODO: Implement focus functionality using StreamPack 3.0.2 API
+                // For now, we'll just show the focus box animation
+                logger.info("Focus requested at: x={}, y={}", x, y)
+            } catch (e: Exception) {
+                logger.warn("Failed to set focus: {}", e.toString())
+            }
+        }
+    }
+
+    /**
+     * Show focus box animation at the touch point
+     */
+    private fun showFocusBox(x: Float, y: Float) {
+        val focusBox = binding.focusBox
+        val focusOverlay = binding.focusOverlay
+        
+        // Calculate position
+        val boxSize = resources.getDimensionPixelSize(R.dimen.focus_box_size)
+        val left = (x - boxSize / 2).toInt()
+        val top = (y - boxSize / 2).toInt()
+        
+        // Set position
+        val params = focusBox.layoutParams as FrameLayout.LayoutParams
+        params.leftMargin = left
+        params.topMargin = top
+        focusBox.layoutParams = params
+        
+        // Show focus box
+        focusBox.visibility = View.VISIBLE
+        
+        // Animate focus box
+        focusBox.alpha = 0f
+        focusBox.animate()
+            .alpha(1f)
+            .scaleX(1.2f)
+            .scaleY(1.2f)
+            .setDuration(300)
+            .withEndAction {
+                focusBox.animate()
+                    .alpha(0f)
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .setDuration(500)
+                    .setStartDelay(500)
+                    .withEndAction {
+                        focusBox.visibility = View.INVISIBLE
+                    }
+            }
     }
 
     /**
      * Update network information (WIFI name and IP address) in the UI
      */
     private fun updateNetworkInfo() {
-        val wifiName = getWifiName()
         val ipAddress = getIpAddress()
-        
-        binding.wifiNameValue.text = wifiName
         binding.ipAddressValue.text = ipAddress
-    }
-
-    /**
-     * Get the current connected WIFI name
-     */
-    @SuppressLint("MissingPermission")
-    private fun getWifiName(): String {
-        val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-        val wifiInfo: WifiInfo? = wifiManager.connectionInfo
-        return if (wifiInfo != null && wifiInfo.ssid != null) {
-            wifiInfo.ssid.replace("^", "").replace("$", "") // Remove quotes
-        } else {
-            "Not connected"
-        }
     }
 
     /**
@@ -201,7 +261,7 @@ class MainActivity : AppCompatActivity() {
             else -> "Disconnected"
         }
         
-        binding.streamStatusValue.text = statusText
+        binding.statusValue.text = statusText
     }
 
     override fun onDestroy() {

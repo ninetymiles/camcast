@@ -12,6 +12,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:keepScreenOn="true" />
+
+    <!-- Focus box overlay -->
+    <FrameLayout
+        android:id="@+id/focusOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="false"
+        android:focusable="false">
+
+        <View
+            android:id="@+id/focusBox"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/focus_box"
+            android:elevation="2dp"
+            android:visibility="invisible" />
+
+    </FrameLayout>
     <!--        app:layout_constraintBottom_toBottomOf="parent"-->
     <!--        app:layout_constraintEnd_toEndOf="parent"-->
     <!--        app:layout_constraintStart_toStartOf="parent"-->
@@ -59,8 +77,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginBottom="16dp"
-            android:alpha="0.8"
-            app:cardBackgroundColor="@color/black"
+            app:cardBackgroundColor="@color/transparent_black"
             app:cardCornerRadius="8dp"
             app:cardElevation="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -72,36 +89,15 @@
                 android:padding="12dp">
 
                 <TextView
-                    android:id="@+id/wifiNameLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="WIFI:"
-                    android:textColor="@color/white"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/wifiNameValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="Unknown"
-                    android:textColor="@color/white"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toEndOf="@+id/wifiNameLabel"
-                    app:layout_constraintTop_toTopOf="@+id/wifiNameLabel" />
-
-                <TextView
                     android:id="@+id/ipAddressLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="IP:"
-                    android:textColor="@color/white"
+                    android:textColor="@color/lighter_gray"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/wifiNameLabel" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/ipAddressValue"
@@ -109,32 +105,32 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:text="Unknown"
-                    android:textColor="@color/white"
+                    android:textColor="@color/lighter_gray"
                     android:textSize="14sp"
                     app:layout_constraintStart_toEndOf="@+id/ipAddressLabel"
                     app:layout_constraintTop_toTopOf="@+id/ipAddressLabel" />
 
                 <TextView
-                    android:id="@+id/streamStatusLabel"
+                    android:id="@+id/statusLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Stream:"
-                    android:textColor="@color/white"
+                    android:text="Status:"
+                    android:textColor="@color/lighter_gray"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ipAddressLabel" />
 
                 <TextView
-                    android:id="@+id/streamStatusValue"
+                    android:id="@+id/statusValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:text="Disconnected"
-                    android:textColor="@color/white"
+                    android:textColor="@color/lighter_gray"
                     android:textSize="14sp"
-                    app:layout_constraintStart_toEndOf="@+id/streamStatusLabel"
-                    app:layout_constraintTop_toTopOf="@+id/streamStatusLabel" />
+                    app:layout_constraintStart_toEndOf="@+id/statusLabel"
+                    app:layout_constraintTop_toTopOf="@+id/statusLabel" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
