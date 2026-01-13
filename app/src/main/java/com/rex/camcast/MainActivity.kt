@@ -235,6 +235,7 @@ class MainActivity : AppCompatActivity() {
                     lifecycleScope.launch {
                         logger.info("Disconnect server")
                         streamer.stopStream()
+                        streamer.close()
                     }
                 }
             }
