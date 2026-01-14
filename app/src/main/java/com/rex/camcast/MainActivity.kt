@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.content.pm.ApplicationInfo
 import android.graphics.Color
 import android.media.AudioFormat
 import android.media.MediaFormat
@@ -179,6 +180,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         getMenuInflater().inflate(R.menu.menu_main, menu)
         return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        menu?.findItem(R.id.action_test)?.setVisible((applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0)
+        return super.onPrepareOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
