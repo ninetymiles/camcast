@@ -30,7 +30,7 @@
     <string name="settings_about">About</string>
 
     <!-- About -->
-    <string name="about_app_summary">"© 2025 RexStudio All rights reserved."</string>
+    <string name="about_app_summary">"© 2026 RexStudio All rights reserved."</string>
     <string name="about_version_title">"Version"</string>
     <string name="about_version_summary" translatable="false">"%1$s r%2$d"</string>
 </resources>
