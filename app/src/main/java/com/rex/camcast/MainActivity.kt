@@ -316,7 +316,7 @@ class MainActivity : AppCompatActivity() {
                 val insets = windowInsets!!.getInsets(
                     (WindowInsetsCompat.Type.systemBars())
                 )
-                logger.trace("v={} insets={}", v, insets)
+                //logger.trace("v={} insets={}", v, insets)
 
                 val mlp = v!!.getLayoutParams() as MarginLayoutParams
                 mlp.leftMargin = insets.left
@@ -324,7 +324,6 @@ class MainActivity : AppCompatActivity() {
                 mlp.rightMargin = insets.right
                 mlp.bottomMargin = insets.bottom
                 v.setLayoutParams(mlp)
-
 //                binding.liveButton.setPadding(insets.left, insets.top, insets.right, insets.bottom)
 
                 WindowInsetsCompat.CONSUMED
@@ -338,8 +337,7 @@ class MainActivity : AppCompatActivity() {
                             or WindowInsetsCompat.Type.displayCutout()
                             or WindowInsetsCompat.Type.navigationBars())
                 )
-                logger.trace("v={} insets={}", v, insets)
-
+                //logger.trace("v={} insets={}", v, insets)
                 v?.setPadding(insets.left, insets.top, insets.right, insets.bottom)
 
                 WindowInsetsCompat.CONSUMED
