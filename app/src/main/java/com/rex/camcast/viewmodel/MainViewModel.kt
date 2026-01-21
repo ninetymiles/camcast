@@ -12,8 +12,12 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class MainViewModel(private val context: Context) : ViewModel() {
+
+    private val logger: Logger = LoggerFactory.getLogger(MainViewModel::class.java)
 
     private val _networkStatus = MutableLiveData<String>()
     val networkStatus: LiveData<String> = _networkStatus
@@ -38,16 +42,19 @@ class MainViewModel(private val context: Context) : ViewModel() {
         connectivityManager.registerNetworkCallback(networkRequest, object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
                 super.onAvailable(network)
+                logger.info("Network available: {}", network)
                 updateNetworkInfo()
             }
 
             override fun onLost(network: Network) {
                 super.onLost(network)
+                logger.info("Network lost: {}", network)
                 updateNetworkInfo()
             }
 
             override fun onCapabilitiesChanged(network: Network, capabilities: NetworkCapabilities) {
                 super.onCapabilitiesChanged(network, capabilities)
+                logger.info("Network capabilities changed: {}, capabilities: {}", network, capabilities)
                 updateNetworkInfo()
             }
         })
@@ -57,6 +64,7 @@ class MainViewModel(private val context: Context) : ViewModel() {
         CoroutineScope(Dispatchers.IO).launch {
             val status = getNetworkStatus()
             val ip = getIpAddress()
+            logger.info("Updating network info - Status: {}, IP: {}", status, ip)
             _networkStatus.postValue(status)
             _ipAddress.postValue(ip)
         }
