@@ -13,9 +13,8 @@ An simple app to cast camera live streaming to RTMP or SRT server.
 
 ## TODO
 
-- Print local WIFI name and IP address HUD overlay
-- Show connecting status HUD
 - Edit server list, can fast switch between multiple server
 - Show focus box
 - Try auto lock focus on objects
 - Provide portal page to request for permissions
+
